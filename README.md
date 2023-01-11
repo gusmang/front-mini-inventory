@@ -2,7 +2,7 @@
 <h1>Mini - Inventory </h1>
 
 <div>
-<div> Dibuatkan menggunakan teknologi</div>
+<div> Dibuatkan menggunakan teknologi :</div> <p></p>
 <div>
 <ul>
   <li>Vue.js </li>
@@ -11,6 +11,7 @@
 </ul>
 </div>
 <p></p>
+<div> Cara Menjalan Aplikasi :</div> <p></p>
 <ul>
   <li>Run npm install ( install semua package )</li>
   <li>Set up url di .env</li>
