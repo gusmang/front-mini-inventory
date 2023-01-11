@@ -4,7 +4,7 @@ import VueRouter  from 'vue-router'
 //import createWebHashHistory  from 'vue-router'
 
 import MainLayout from '../views/Main.vue'
-import MemberList from '../views/pages/member/mainList.vue'
+import Dashboard from '../views/pages/main.vue'
 import Login from '../views/Login.vue'
 
 import KategoriList from '../views/pages/kategori/main.vue'
@@ -26,9 +26,9 @@ const routes = [
         component: MainLayout,
         children: [
             {
-                path: '/',
+                path: '/dashboard/main',
                 name: 'Main Dashboard',
-                component: MemberList
+                component: Dashboard
             },
             {
                 path: '/dashboard/kategori',

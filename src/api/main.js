@@ -31,3 +31,11 @@ export function apiGetCekAkses(data) {
         data: data
     })
 }
+
+export function apiFetchList(data) {
+    return request_util({
+        url: 'barang/chart', 
+        method: 'POST',
+        data: data
+    })
+}
