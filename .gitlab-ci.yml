@@ -1,0 +1,89 @@
+stages:
+  - build
+  - deploy
+  - release
+  - scan
+
+# Cache modules using lock file
+cache:
+  key:
+    files:
+      - package-lock.json
+  paths:
+    - ~/.npm/
+    - node_modules/
+    
+build:
+  stage: build
+  image: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/node:14-stretch-slim
+  artifacts:
+    paths:
+      - dist/
+  variables:
+    ENV_VARIABLE: ${CI_COMMIT_BRANCH}_ENV
+  before_script:
+    - cat ${!ENV_VARIABLE} > .env
+  script:
+    - |
+      if [[ -z "$CI_COMMIT_TAG" ]]; then
+        cat "${!ENV_VARIABLE}"
+      else
+        cat ${master_ENV} > .env
+      fi
+    - export NODE_OPTIONS="--max-old-space-size=1024"
+    - npm install
+    - npm run build
+  rules:
+    - if: '$CI_COMMIT_TAG || $CI_COMMIT_BRANCH && $CI_COMMIT_REF_NAME != "master"'
+
+staging:
+  image: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/google/cloud-sdk:latest
+  stage: deploy
+  before_script:
+    - export CI_TLS_HOST=staging-dashboard.dinaran.id 
+    - gcloud auth activate-service-account --key-file $GCP_SERVICE_KEY
+    - gcloud config set project $GCP_PROJECT_ID
+  script:
+    - gsutil -m rm -a gs://staging-dashboard.dinaran.id/**
+    - gsutil -m cp -R dist/* gs://staging-dashboard.dinaran.id
+
+  environment:
+    name: $CI_COMMIT_BRANCH
+    url: https://$CI_TLS_HOST
+  only:
+    - branches
+  except:
+    - master
+
+production:
+  image: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/google/cloud-sdk:latest
+  stage: release
+  before_script:
+    - export CI_TLS_HOST=dashboard.dinaran.id 
+    - gcloud auth activate-service-account --key-file $GCP_SERVICE_KEY
+    - gcloud config set project $GCP_PROJECT_ID  
+  script:
+    - gsutil -m rm -a gs://dashboard.dinaran.id/**
+    - gsutil -m cp -R dist/* gs://dashboard.dinaran.id
+  environment:
+    name: production
+    url: https://$CI_TLS_HOST
+  stage: release
+  only:
+    - tags
+  when: manual
+
+pentest:
+  stage: scan
+  image: owasp/zap2docker-stable
+  variables:
+    website: "https://dashboard.dinaran-gold.com"
+  script:
+    - mkdir /zap/wrk/
+    - /zap/zap-baseline.py -t $website -r scan-report.html || true
+    - cp /zap/wrk/scan-report.html .
+  artifacts:
+    paths: [scan-report.html]
+  only:
+    - tags
+  when: manual
