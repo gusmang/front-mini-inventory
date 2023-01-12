@@ -36,8 +36,18 @@ const defaultState = () => {
                         {"id":10,"parent":1,"module":"List","icon":"mdi-chart-box-outline","active":false,"to":"barang","counts":0}
                     ]
                 },
-                {"id":5,"parent":0,"module":"Pembelian","icon":"mdi-gold","active":false,"to":"pembelian"},
-                {"id":6,"parent":0,"module":"Penjualan","icon":"mdi-cash-check","active":false,"to":"penjualan"},
+                {"id":5,"parent":0,"module":"Pembelian","icon":"mdi-gold","active":false,"to":"pembelian", 
+                    "children":[
+                        {"id":11,"parent":1,"module":"List","icon":"mdi-chart-box-outline","active":false,"to":"pembelian","counts":0},
+                        {"id":12,"parent":1,"module":"Tambah","icon":"mdi-chart-box-outline","active":false,"to":"pembelian","counts":0}
+                    ]
+                },
+                {"id":6,"parent":0,"module":"Penjualan","icon":"mdi-cash-check","active":false,"to":"penjualan", 
+                    "children":[
+                        {"id":13,"parent":1,"module":"List","icon":"mdi-chart-box-outline","active":false,"to":"penjualan","counts":0},
+                        {"id":14,"parent":1,"module":"Tambah","icon":"mdi-chart-box-outline","active":false,"to":"pembelian","counts":0}
+                    ]
+                },
             ]
         },
         loading: false,

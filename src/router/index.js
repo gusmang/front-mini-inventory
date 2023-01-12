@@ -10,6 +10,7 @@ import Login from '../views/Login.vue'
 import KategoriList from '../views/pages/kategori/main.vue'
 import SupplierList from '../views/pages/supplier/main.vue'
 import BarangList from '../views/pages/barang/main.vue'
+import PembelianList from '../views/pages/pembelian/main.vue'
 
 if (!window.VueRouter) Vue.use(VueRouter)
 
@@ -44,6 +45,11 @@ const routes = [
                 path: '/dashboard/barang',
                 name: 'List Barang',
                 component: BarangList
+            },
+            {
+                path: '/dashboard/pembelian',
+                name: 'List Pembelian',
+                component: PembelianList
             },
         ]
     }
