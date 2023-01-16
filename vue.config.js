@@ -7,6 +7,6 @@ module.exports = {
   //   : '/',
   publicPath: '',
   devServer: {
-     proxy: 'https://balikencana-dev.com/api'
+     proxy: 'https://mini-inventory.balikencana-dev.com/api'
   }
 }

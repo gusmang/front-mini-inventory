@@ -11,10 +11,19 @@ const defaultState = () => {
             search: {},
         },
         attributes: {
+            kode_pembelian:"",
+            tanggal_pembelian:"",
+            total_pembelian:0,
             list: [],
+            itemArray:[],
+            itemHargaBeli:[],
+            itemHargaQty:[],
+            itemHargaSubTtl:[],
+            itemStok:[],
             detail: {},
             totalVerify: [],
             dialogAdd:false,
+            dialogBarang:false,
             messageInp: "",
             DetailMember:"",
             pageMember:1,
@@ -27,7 +36,9 @@ const defaultState = () => {
             success: "",
         },
         searchForm:{
-            name:""
+            name:"",
+            date1:"",
+            date2:"",
         },
         addForm:{
             name:"",

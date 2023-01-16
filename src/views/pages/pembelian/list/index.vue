@@ -37,7 +37,7 @@
                     </v-btn>
                 </div>
                 <v-btn color="success" small outlined style="margin-left: 20px" @click="showAdd()">
-                    <v-icon>mdi-download</v-icon> Export Data
+                    <v-icon>mdi-plus</v-icon> Tambah Data
                 </v-btn>
 
             </template>
@@ -48,10 +48,50 @@
                         <v-expansion-panel-content>
                             <v-layout>
                                 <v-flex>
-                                    <v-text-field v-model="$store.state.kategori.searchForm.name"
-                                        label="Search By Name / Email / Address / Telepon" single-line small clearable
+                                    <v-text-field v-model="$store.state.pembelian.searchForm.name"
+                                        label="Search By ID Pembelian / Nama Supplier" single-line small clearable
                                         @keyup.13="fetch(1)">
                                     </v-text-field>
+                                </v-flex>
+                                <v-flex>
+                                    <v-menu :close-on-content-click="false" :return-value.sync="date"
+                                        transition="scale-transition" offset-y min-width="auto">
+                                        <template v-slot:activator="{ on, attrs }">
+                                            <v-text-field v-model="$store.state.pembelian.searchForm.date1"
+                                                label="Start Date" prepend-icon="mdi-calendar" readonly clearable
+                                                v-bind="attrs" v-on="on"></v-text-field>
+                                        </template>
+                                        <v-date-picker v-model="$store.state.pembelian.searchForm.date1" no-title
+                                            scrollable>
+                                            <v-spacer></v-spacer>
+                                            <v-btn text color="primary" @click="menu = false">
+                                                Cancel
+                                            </v-btn>
+                                            <v-btn text color="primary" @click="$refs.menu.save(date)">
+                                                OK
+                                            </v-btn>
+                                        </v-date-picker>
+                                    </v-menu>
+                                </v-flex>
+                                <v-flex>
+                                    <v-menu :close-on-content-click="false" :return-value.sync="date"
+                                        transition="scale-transition" offset-y min-width="auto">
+                                        <template v-slot:activator="{ on, attrs }">
+                                            <v-text-field v-model="$store.state.pembelian.searchForm.date2"
+                                                label="End Date" prepend-icon="mdi-calendar" readonly clearable
+                                                v-bind="attrs" v-on="on"></v-text-field>
+                                        </template>
+                                        <v-date-picker v-model="$store.state.pembelian.searchForm.date2" no-title
+                                            scrollable>
+                                            <v-spacer></v-spacer>
+                                            <v-btn text color="primary" @click="menu = false">
+                                                Cancel
+                                            </v-btn>
+                                            <v-btn text color="primary" @click="$refs.menu.save(date)">
+                                                OK
+                                            </v-btn>
+                                        </v-date-picker>
+                                    </v-menu>
                                 </v-flex>
                             </v-layout>
                             <v-layout>
@@ -78,7 +118,7 @@
 
                         <template v-slot:[`item.action`]="{ item }">
 
-                            <v-btn color="info" icon v-bind="attrs" v-on="on" @click="findKategori(item)">
+                            <v-btn color="info" icon @click="findKategori(item)">
                                 <v-icon small>mdi-eye</v-icon>
                             </v-btn>
 
@@ -97,7 +137,7 @@
 
 <script>
 import CustomCard from "../../../../components/CustomCard.vue";
-import ModalForm from "../dialog/addSupplier.vue";
+import ModalForm from "../dialog/addPembelian.vue";
 //import downloadexcel from "vue-json-excel";
 
 export default {
@@ -160,7 +200,9 @@ export default {
                 .dispatch("pembelian/fetchList", {
                     page: this.pagination.page,
                     itemsPerPage: this.pagination.itemsPerPage,
-                    name: this.$store.state.kategori.searchForm.name
+                    name: this.$store.state.pembelian.searchForm.name,
+                    date1: this.$store.state.pembelian.searchForm.date1,
+                    date2: this.$store.state.pembelian.searchForm.date2,
                 })
                 .then(() => {
                     this.$store.commit("main/setLoading", false);
@@ -211,7 +253,7 @@ export default {
             this.$store.state.supplier.editForm.telepon = item.telepon;
         },
         showAdd() {
-            this.$store.state.kategori.attributes.dialogAdd = true;
+            this.$store.state.pembelian.attributes.dialogAdd = true;
             this.$store.state.kategori.addForm.name = "";
         },
         edit(dlg) {
